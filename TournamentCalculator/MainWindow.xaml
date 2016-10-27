@@ -1,9 +1,68 @@
 <Window x:Class="TournamentCalculator.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="525" Background="{StaticResource ResourceKey=ColorAqua}">
+        Title="Tournament Calculator" Height="400" Width="600" Background="{StaticResource ResourceKey=ColorAqua}">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Label Name="label1" HorizontalAlignment="Center" VerticalAlignment="Center" Content="Turnierberechner" FontSize="22" FontWeight="Bold" />
+
+        <GroupBox Header="Eingabe" Grid.Row="1" Width="200" Height="auto" Margin="10" HorizontalAlignment="Left">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Spieler:" />
+                    <TextBox Text="{Binding Path=AmountPlayers}" Margin="26,0,0,0" Width="30" Height="20"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Stärke:" />
+                    <ComboBox ItemsSource="{Binding Path=PlayerAverages}" SelectedItem="{Binding Path=SelectedPlayerAverage}" Margin="29,0,0,0" Width="50" Height="20"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Geräte:" />
+                    <TextBox Text="{Binding Path=AmountDevices}" Margin="27,0,0,0" Width="30" Height="20"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Spielbeginn:" />
+                    <TextBox Text="{Binding Path=Hour}" Width="20" Height="20"/>
+                    <Label Content=":" Padding="2"/>
+                    <TextBox Text="{Binding Path=Minutes}" Width="20" Height="20" />
+                    <Label Content="Uhr" />
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Header="Turniermodus" Grid.Row="1" Width="150" HorizontalAlignment="Right" Margin="10">
+        <StackPanel>
+            
+            <StackPanel Orientation="Horizontal">
+                <Label Content="Leg:" />
+                <ComboBox ItemsSource="{Binding Path=LegOptions}" SelectedItem="{Binding Path=SelectedLegOption}" Width="70" Height="20" Margin="17,0,0,0"/>
+            </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Set:" />
+                    <ComboBox ItemsSource="{Binding Path=SetOptions}" SelectedItem="{Binding Path=SelectedSetOption}" Width="70" Height="20" Margin="20,0,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Match:" />
+                    <ComboBox ItemsSource="{Binding Path=MatchOptions}" SelectedItem="{Binding Path=SelectedMatchOption}" Width="70" Height="20" Margin="3,0,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Modus:" />
+                    <ComboBox ItemsSource="{Binding Path=ModeOptions}" SelectedItem="{Binding Path=SelectedModeOption}" Width="70" Height="20"/>
+                </StackPanel>
+            </StackPanel>
+        </GroupBox>
+        <Button Content="Berechnen" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom" Command="{Binding Path=CalculateCommand}" Width="100" Margin="10" />
+        <Rectangle Grid.Row="1" Height="1" VerticalAlignment="Bottom" Fill="Black" />
+
+        <GroupBox Header="Ergebnisse" Grid.Row="2">
+            <StackPanel>
+                
+            </StackPanel>
+        </GroupBox>
     </Grid>
 </Window>
 
