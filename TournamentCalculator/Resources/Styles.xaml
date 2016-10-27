@@ -1,0 +1,184 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <RadialGradientBrush GradientOrigin=".55,.75" RadiusX=".8" RadiusY=".8" x:Key="ColorAqua">
+        <RadialGradientBrush.GradientStops>
+            <GradientStop Color="White" Offset="0.1"></GradientStop>
+            <GradientStop Color="#FFDBFFFF" Offset="1"></GradientStop>
+        </RadialGradientBrush.GradientStops>
+    </RadialGradientBrush>
+    
+    <RadialGradientBrush GradientOrigin=".55,.75" RadiusX=".8" RadiusY=".8" x:Key="ColorBlue">
+        <RadialGradientBrush.GradientStops>
+            <GradientStop Color="White" Offset="0.1"></GradientStop>
+            <GradientStop Color="#7799ff" Offset="1" x:Name="ButtonBorderGradientStop1"></GradientStop>
+        </RadialGradientBrush.GradientStops>
+    </RadialGradientBrush>
+
+    <RadialGradientBrush GradientOrigin=".55,.75" RadiusX=".8" RadiusY=".8" x:Key="ColorLightBlue">
+        <RadialGradientBrush.GradientStops>
+            <GradientStop Color="White" Offset="0.1"></GradientStop>
+            <GradientStop Color="#aaccff" Offset="1"></GradientStop>
+        </RadialGradientBrush.GradientStops>
+    </RadialGradientBrush>
+
+    <RadialGradientBrush GradientOrigin=".55,.75" RadiusX=".8" RadiusY=".8" x:Key="ColorDarkBlue">
+        <RadialGradientBrush.GradientStops>
+            <GradientStop Color="White" Offset="0.1"></GradientStop>
+            <GradientStop Color="#4466cc" Offset="1"></GradientStop>
+        </RadialGradientBrush.GradientStops>
+    </RadialGradientBrush>
+
+    <RadialGradientBrush GradientOrigin=".55,.75" RadiusX=".8" RadiusY=".8" x:Key="ColorGray">
+        <RadialGradientBrush.GradientStops>
+            <GradientStop Color="White" Offset="0.1"></GradientStop>
+            <GradientStop Color="Gray" Offset="1"></GradientStop>
+        </RadialGradientBrush.GradientStops>
+    </RadialGradientBrush>
+
+    <RadialGradientBrush GradientOrigin=".55,.75" RadiusX=".8" RadiusY=".8" x:Key="ColorMediumAquamarine">
+        <RadialGradientBrush.GradientStops>
+            <GradientStop Color="White" Offset="0.1"></GradientStop>
+            <GradientStop Color="MediumAquamarine" Offset="1"></GradientStop>
+        </RadialGradientBrush.GradientStops>
+    </RadialGradientBrush>
+
+    <RadialGradientBrush GradientOrigin=".55,.75" RadiusX=".8" RadiusY=".8" x:Key="ColorYellow">
+        <RadialGradientBrush.GradientStops>
+            <GradientStop Color="White" Offset="0.1"></GradientStop>
+            <GradientStop Color="#ffff99" Offset="1"></GradientStop>
+        </RadialGradientBrush.GradientStops>
+    </RadialGradientBrush>
+
+    <Style x:Key="ButtonStyle" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <ControlTemplate.Resources>
+                        <Style x:Key="ShadowStyle">
+                            <Setter Property="Control.Foreground" Value="LightGray" />
+                        </Style>
+                    </ControlTemplate.Resources>
+                    <Border Name="border" BorderThickness="1" Padding="4,2" Cursor="Hand" BorderBrush="DarkGray" CornerRadius="3" Background="{TemplateBinding Background}">
+                        <Grid >
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="contentShadow" Style="{StaticResource ShadowStyle}">
+                                <ContentPresenter.RenderTransform>
+                                    <TranslateTransform X="1.0" Y="1.0" />
+                                </ContentPresenter.RenderTransform>
+                            </ContentPresenter>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="content"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Background" Value="{StaticResource ColorBlue}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource ColorLightBlue}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource ColorDarkBlue}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{StaticResource ColorGray}" />
+                <Setter Property="Foreground" Value="Gray" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="SwitchButtonStyle" TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <ControlTemplate.Resources>
+                        <Style x:Key="ShadowStyle">
+                            <Setter Property="Control.Foreground" Value="LightGray" />
+                        </Style>
+                    </ControlTemplate.Resources>
+                    <Border Name="border" BorderThickness="1" Padding="4,2" Cursor="Hand" BorderBrush="DarkGray" CornerRadius="3" Background="{TemplateBinding Background}">
+                        <Grid >
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="contentShadow" Style="{StaticResource ShadowStyle}">
+                                <ContentPresenter.RenderTransform>
+                                    <TranslateTransform X="1.0" Y="1.0" />
+                                </ContentPresenter.RenderTransform>
+                            </ContentPresenter>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Name="content"/>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Background" Value="{StaticResource ColorBlue}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource ColorLightBlue}" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource ColorDarkBlue}" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{StaticResource ColorYellow}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <Style x:Key="BorderButtonStyle" TargetType="Border">
+        <Setter Property="BorderBrush" Value="{StaticResource ColorBlue}" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="{StaticResource ColorDarkBlue}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="SmallBorderButtonStyle" TargetType="Border">
+        <Setter Property="BorderBrush" Value="Black" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="BorderBrush" Value="Blue" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="TransparentRow" TargetType="DataGridRow">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style x:Key="TextBlockStyle" TargetType="TextBlock">
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Foreground" Value="#0000ff" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="TextDecorations" Value="Underline" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="ComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="Background" Value="{StaticResource ColorBlue}" />
+        <Style.Triggers>
+            <Trigger Property="ToggleButton.IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource ColorLightBlue}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <Style x:Key="CounterStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style x:Key="GridCounterStyle" TargetType="Grid">
+        <Setter Property="Background" Value="White" />
+        <Setter Property="Cursor" Value="Hand" />
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource ColorBlue}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+</ResourceDictionary>
