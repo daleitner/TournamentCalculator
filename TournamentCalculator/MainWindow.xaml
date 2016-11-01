@@ -17,41 +17,41 @@
                     <TextBox Text="{Binding Path=AmountPlayers}" Margin="26,0,0,0" Width="30" Height="20"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="Stärke:" />
+                    <Label Content="St&#228;rke:" />
                     <ComboBox ItemsSource="{Binding Path=PlayerAverages}" SelectedItem="{Binding Path=SelectedPlayerAverage}" Margin="29,0,0,0" Width="50" Height="20"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
-                    <Label Content="Geräte:" />
+                    <Label Content="Ger&#228;te:" />
                     <TextBox Text="{Binding Path=AmountDevices}" Margin="27,0,0,0" Width="30" Height="20"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Spielbeginn:" />
-                    <TextBox Text="{Binding Path=Hour}" Width="20" Height="20"/>
+                    <TextBox Text="{Binding Path=Hour}" Width="25" Height="20"/>
                     <Label Content=":" Padding="2"/>
-                    <TextBox Text="{Binding Path=Minutes}" Width="20" Height="20" />
+                    <TextBox Text="{Binding Path=Minutes}" Width="25" Height="20" />
                     <Label Content="Uhr" />
                 </StackPanel>
             </StackPanel>
         </GroupBox>
 
-        <GroupBox Header="Turniermodus" Grid.Row="1" Width="150" HorizontalAlignment="Right" Margin="10">
+        <GroupBox Header="Turniermodus" Grid.Row="1" Width="200" HorizontalAlignment="Right" Margin="10">
         <StackPanel>
             
             <StackPanel Orientation="Horizontal">
                 <Label Content="Leg:" />
-                <ComboBox ItemsSource="{Binding Path=LegOptions}" SelectedItem="{Binding Path=SelectedLegOption}" Width="70" Height="20" Margin="17,0,0,0"/>
+                <ComboBox ItemsSource="{Binding Path=LegOptions}" SelectedItem="{Binding Path=SelectedLegOption}" Width="120" Height="20" Margin="17,0,0,0"/>
             </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Set:" />
-                    <ComboBox ItemsSource="{Binding Path=SetOptions}" SelectedItem="{Binding Path=SelectedSetOption}" Width="70" Height="20" Margin="20,0,0,0"/>
+                    <ComboBox ItemsSource="{Binding Path=SetOptions}" SelectedItem="{Binding Path=SelectedSetOption}" Width="120" Height="20" Margin="20,0,0,0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Match:" />
-                    <ComboBox ItemsSource="{Binding Path=MatchOptions}" SelectedItem="{Binding Path=SelectedMatchOption}" Width="70" Height="20" Margin="3,0,0,0"/>
+                    <ComboBox ItemsSource="{Binding Path=MatchOptions}" SelectedItem="{Binding Path=SelectedMatchOption}" Width="120" Height="20" Margin="3,0,0,0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                     <Label Content="Modus:" />
-                    <ComboBox ItemsSource="{Binding Path=ModeOptions}" SelectedItem="{Binding Path=SelectedModeOption}" Width="70" Height="20"/>
+                    <ComboBox ItemsSource="{Binding Path=ModeOptions}" SelectedItem="{Binding Path=SelectedModeOption}" Width="120" Height="20"/>
                 </StackPanel>
             </StackPanel>
         </GroupBox>
@@ -60,7 +60,11 @@
 
         <GroupBox Header="Ergebnisse" Grid.Row="2">
             <StackPanel>
-                
+                <Label Content="{Binding Path=LegDuration}" />
+                <Label Content="{Binding Path=SetDuration}" />
+                <Label Content="{Binding Path=MatchDuration}" />
+                <Label Content="{Binding Path=FullDuration}" />
+                <Label Content="{Binding Path=EndTime}" />
             </StackPanel>
         </GroupBox>
     </Grid>
