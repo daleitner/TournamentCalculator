@@ -10,7 +10,7 @@ namespace TournamentCalculator
 {
 	public class MainViewModel : ViewModelBase
 	{
-        private const int throwDuration = 25; //2 Spieler, jeweils 3 Darts, insgesamt 25 sekunden
+        private const int ThrowDuration = 25; //2 Spieler, jeweils 3 Darts, insgesamt 25 sekunden
 		#region members
 		private RelayCommand calculateCommand = null;
 		private List<int> playerAverages = null;
@@ -47,12 +47,12 @@ namespace TournamentCalculator
 
             this.setOptions = new List<string>() { "1 Leg" };
             for (int i = 3; i < 12; i += 2)
-                this.setOptions.Add("Best of " + i + "Legs");
+                this.setOptions.Add("Best of " + i + " Legs");
             this.selectedSetOption = this.setOptions[1];
 
             this.matchOptions = new List<string>() { "1 Set" };
             for (int i = 3; i < 8; i += 2)
-                this.matchOptions.Add("Best of " + i + "Sets");
+                this.matchOptions.Add("Best of " + i + " Sets");
             this.selectedMatchOption = this.matchOptions[0];
 
             this.modeOptions = new List<string> { "KO Modus", "Doppel KO", "Round Robin", "Round Robin + KO", "Round Robin + DKO", "Ziehung mit Nachkauf" };
@@ -60,6 +60,9 @@ namespace TournamentCalculator
 
             this.playerAverages = new List<int>() { 35, 40, 45, 50, 60, 70, 80, 100};
             this.selectedPlayerAverage = 45;
+
+	        this.amountDevices = 1;
+	        this.amountPlayers = 16;
         }
         #endregion
 
@@ -320,8 +323,40 @@ namespace TournamentCalculator
             Int32.TryParse(this.SelectedLegOption, out legPoints);
 
             int roundsPerLeg = legPoints / this.SelectedPlayerAverage;
-            double nLegDuration = (double)roundsPerLeg * throwDuration / 60;
-            this.LegDuration = "Leg Dauer: " + nLegDuration;
+            double nLegDuration = (double)roundsPerLeg * ThrowDuration / 60;
+			nLegDuration = Math.Round(nLegDuration, 1);
+            this.LegDuration = "Leg Dauer: " + nLegDuration + " min";
+
+			double avgLegs = (double)(3*GetNumberOfBestOfString(this.SelectedSetOption)+1)/4; //((x+1)/2 + x)/2
+			if (avgLegs < 0)
+				avgLegs = 1;
+			double nSetDuration = nLegDuration*avgLegs;
+			nSetDuration = Math.Round(nSetDuration, 1);
+			this.SetDuration = "Set Dauer: " + nSetDuration + " min";
+
+			double avgSets = (double)(3 * GetNumberOfBestOfString(this.SelectedMatchOption) + 1) / 4; //((x+1)/2 + x)/2
+			if (avgSets < 0)
+				avgSets = 1;
+			double nMatchDuration = nSetDuration * avgSets;
+			nMatchDuration = Math.Round(nMatchDuration, 1);
+			this.MatchDuration = "Match Dauer: " + nMatchDuration + " min";
+
+			switch (this.SelectedModeOption)
+			{
+				case "Doppel KO":
+					CalculateDKO(nMatchDuration);
+					break;
+			}
+		}
+
+		private void CalculateDKO(double nMatchDuration)
+		{
+			int matchCount = (this.amountPlayers - 1)*2;
+			var matches = new List<Match>();
+			for (var i = 0; i < matchCount; i++)
+			{
+				matches.Add(new Match());
+			}
 		}
 
         private bool CanCalculate()
@@ -347,6 +382,16 @@ namespace TournamentCalculator
                 return false;
             return true;
         }
+
+		private int GetNumberOfBestOfString(string s)
+		{
+			int ret = 0;
+			var arr = s.Split(' ');
+			if (arr.Length < 3)
+				return -1;
+			Int32.TryParse(arr[2], out ret);
+			return ret;
+		}
         #endregion
 
         #region public methods
