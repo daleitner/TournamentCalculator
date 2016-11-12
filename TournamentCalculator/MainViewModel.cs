@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using System.Windows.Input;
 using Base;
 
@@ -349,17 +350,14 @@ namespace TournamentCalculator
 
 		private void CalculateDKO(double nMatchDuration)
 		{
-			//int matchCount = (this.amountPlayers - 1)*2;
-			//var matches = new List<Match>();
-			//for (var i = 0; i < matchCount; i++)
-			//{
-			//	matches.Add(new Match());
-			//}
 			var c = new TournamentController(this.amountPlayers, this.amountDevices, nMatchDuration, OffsetDuration);
 			var totalDuration = c.Simulate();
 			var totalHour = (int)totalDuration/60;
 			var totalMinutes = totalDuration - totalHour*60;
 			this.FullDuration = "Gesamtdauer: " + totalHour + " h " + totalMinutes + " min";
+			var endDate = new DateTime(2000,1,1,this.hour, this.minutes, 0);
+			endDate = endDate.AddMinutes(totalDuration);
+			this.EndTime = "Spielende: " + endDate.ToString("HH:mm") + " Uhr";
 		}
 
         private bool CanCalculate()
