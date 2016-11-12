@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Input;
-using System.Collections.ObjectModel;
 using Base;
 
 namespace TournamentCalculator
@@ -11,18 +8,19 @@ namespace TournamentCalculator
 	public class MainViewModel : ViewModelBase
 	{
         private const int ThrowDuration = 25; //2 Spieler, jeweils 3 Darts, insgesamt 25 sekunden
+		private const double OffsetDuration = 3; //3 Minuten Wartezeit pro Durchgang (Aufruf, bullwurf usw)
 		#region members
-		private RelayCommand calculateCommand = null;
-		private List<int> playerAverages = null;
-		private List<string> legOptions = null;
-		private List<string> setOptions = null;
-		private List<string> matchOptions = null;
-		private List<string> modeOptions = null;
-		private int amountPlayers = 0;
-		private int selectedPlayerAverage = 0;
-		private int amountDevices = 0;
+		private RelayCommand calculateCommand;
+		private List<int> playerAverages;
+		private List<string> legOptions;
+		private List<string> setOptions;
+		private List<string> matchOptions;
+		private List<string> modeOptions;
+		private int amountPlayers;
+		private int selectedPlayerAverage;
+		private int amountDevices;
         private int hour = 19;
-        private int minutes = 0;
+        private int minutes;
 		private string selectedLegOption = "";
 		private string selectedSetOption = "";
 		private string selectedMatchOption = "";
@@ -42,23 +40,23 @@ namespace TournamentCalculator
 
         private void InitializeData()
         {
-            this.legOptions = new List<string>() {"301", "501"};
+            this.legOptions = new List<string> {"301", "501"};
             this.selectedLegOption = this.legOptions[1];
 
-            this.setOptions = new List<string>() { "1 Leg" };
-            for (int i = 3; i < 12; i += 2)
+            this.setOptions = new List<string> { "1 Leg" };
+            for (var i = 3; i < 12; i += 2)
                 this.setOptions.Add("Best of " + i + " Legs");
             this.selectedSetOption = this.setOptions[1];
 
-            this.matchOptions = new List<string>() { "1 Set" };
-            for (int i = 3; i < 8; i += 2)
+            this.matchOptions = new List<string> { "1 Set" };
+            for (var i = 3; i < 8; i += 2)
                 this.matchOptions.Add("Best of " + i + " Sets");
             this.selectedMatchOption = this.matchOptions[0];
 
             this.modeOptions = new List<string> { "KO Modus", "Doppel KO", "Round Robin", "Round Robin + KO", "Round Robin + DKO", "Ziehung mit Nachkauf" };
             this.selectedModeOption = this.modeOptions[1];
 
-            this.playerAverages = new List<int>() { 35, 40, 45, 50, 60, 70, 80, 100};
+            this.playerAverages = new List<int> { 35, 40, 45, 50, 60, 70, 80, 100};
             this.selectedPlayerAverage = 45;
 
 	        this.amountDevices = 1;
@@ -319,25 +317,25 @@ namespace TournamentCalculator
 		#region private methods
 		private void Calculate()
 		{
-            int legPoints = 0;
+            int legPoints;
             Int32.TryParse(this.SelectedLegOption, out legPoints);
 
-            int roundsPerLeg = legPoints / this.SelectedPlayerAverage;
-            double nLegDuration = (double)roundsPerLeg * ThrowDuration / 60;
+            var roundsPerLeg = legPoints / this.SelectedPlayerAverage;
+            var nLegDuration = (double)roundsPerLeg * ThrowDuration / 60;
 			nLegDuration = Math.Round(nLegDuration, 1);
             this.LegDuration = "Leg Dauer: " + nLegDuration + " min";
 
-			double avgLegs = (double)(3*GetNumberOfBestOfString(this.SelectedSetOption)+1)/4; //((x+1)/2 + x)/2
+			var avgLegs = (double)(3*GetNumberOfBestOfString(this.SelectedSetOption)+1)/4; //((x+1)/2 + x)/2
 			if (avgLegs < 0)
 				avgLegs = 1;
-			double nSetDuration = nLegDuration*avgLegs;
+			var nSetDuration = nLegDuration*avgLegs;
 			nSetDuration = Math.Round(nSetDuration, 1);
 			this.SetDuration = "Set Dauer: " + nSetDuration + " min";
 
-			double avgSets = (double)(3 * GetNumberOfBestOfString(this.SelectedMatchOption) + 1) / 4; //((x+1)/2 + x)/2
+			var avgSets = (double)(3 * GetNumberOfBestOfString(this.SelectedMatchOption) + 1) / 4; //((x+1)/2 + x)/2
 			if (avgSets < 0)
 				avgSets = 1;
-			double nMatchDuration = nSetDuration * avgSets;
+			var nMatchDuration = nSetDuration * avgSets;
 			nMatchDuration = Math.Round(nMatchDuration, 1);
 			this.MatchDuration = "Match Dauer: " + nMatchDuration + " min";
 
@@ -357,9 +355,11 @@ namespace TournamentCalculator
 			//{
 			//	matches.Add(new Match());
 			//}
-			TournamentController c = new TournamentController(this.amountPlayers, this.amountDevices, nMatchDuration);
+			var c = new TournamentController(this.amountPlayers, this.amountDevices, nMatchDuration, OffsetDuration);
 			var totalDuration = c.Simulate();
-			this.FullDuration = "Total:" + totalDuration;
+			var totalHour = (int)totalDuration/60;
+			var totalMinutes = totalDuration - totalHour*60;
+			this.FullDuration = "Gesamtdauer: " + totalHour + " h " + totalMinutes + " min";
 		}
 
         private bool CanCalculate()
@@ -388,7 +388,7 @@ namespace TournamentCalculator
 
 		private int GetNumberOfBestOfString(string s)
 		{
-			int ret = 0;
+			int ret;
 			var arr = s.Split(' ');
 			if (arr.Length < 3)
 				return -1;

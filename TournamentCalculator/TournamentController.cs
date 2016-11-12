@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TournamentCalculator
 {
 	public class TournamentController
 	{
-		public TournamentController(int amountPlayers, int amountDevices, double matchDuration)
+		public TournamentController(int amountPlayers, int amountDevices, double matchDuration, double offsetDuration)
 		{
 			this.AmountPlayers = amountPlayers;
 			this.AmountDevices = amountDevices;
 			this.MatchDuration = matchDuration;
+			this.OffsetDuration = offsetDuration;
 		}
 
 		public int AmountPlayers { get; set; }
 		public int AmountDevices { get; set; }
 		public double MatchDuration { get; set; }
-
+		public double OffsetDuration { get; set; }
 		public double Simulate()
 		{
 			double duration = 0.0;
@@ -33,8 +30,15 @@ namespace TournamentCalculator
 					{
 						if (!matches[j].IsFinished && matches[j].IsPlayable && !playedMatches.Contains(matches[j]))
 						{
-							playedMatches.Add(matches[j]);
-							found = true;
+							if (matches[j].Name1 == "FL" || matches[j].Name2 == "FL")
+							{
+								EndMatch(matches[j], matches);
+							}
+							else
+							{
+								playedMatches.Add(matches[j]);
+								found = true;
+							}
 						}
 					}
 				}
@@ -42,7 +46,7 @@ namespace TournamentCalculator
 				{
 					EndMatch(match, matches);
 				}
-				duration += this.MatchDuration;
+				duration += this.MatchDuration + this.OffsetDuration;
 			}
 			return duration;
 		}
@@ -118,28 +122,28 @@ namespace TournamentCalculator
 		public List<int> EndMatch(Match match, List<Match> matches)
 		{
 			var ret = new List<int>();
-			var numberOfMatches = (this.AmountPlayers-1)*2;
-			//var numberOfPlayers = tournament.Matches.Count / 2 + 1;
-			int winPositionKey = -1;
+			var numberOfMatches = matches.Count;
+			var tournamentSize = GetTournamentSize(this.AmountPlayers);
+			int winPositionKey;
 			int losePositionKey = -1;
-			bool isWinnerPlayer1 = true; //is winner of this match Player1 of his next match
+			bool isWinnerPlayer1; //is winner of this match Player1 of his next match
 			bool isLoserPlayer1 = true; //is loser of this match Player1 of his next match
 
 			match.IsFinished = true;
 
-			if (match.PositionKey < this.AmountPlayers / 2) //first round
+			if (match.PositionKey < tournamentSize / 2) //first round
 			{
-				winPositionKey = (match.PositionKey + this.AmountPlayers) / 2; //S1 -> S2
+				winPositionKey = (match.PositionKey + tournamentSize) / 2; //S1 -> S2
 				isWinnerPlayer1 = match.PositionKey % 2 == 0;
 
-				losePositionKey = match.PositionKey / 2 + this.AmountPlayers * 3 / 4; //S1 -> V1
+				losePositionKey = match.PositionKey / 2 + tournamentSize * 3 / 4; //S1 -> V1
 				isLoserPlayer1 = match.PositionKey % 2 == 0;
 
 			}
-			else if (IsWinnerSide(match.PositionKey, this.AmountPlayers)) // winner side
+			else if (IsWinnerSide(match.PositionKey, tournamentSize)) // winner side
 			{
-				var start = this.AmountPlayers / 2;
-				var areaSize = this.AmountPlayers / 4;
+				var start = tournamentSize / 2;
+				var areaSize = tournamentSize / 4;
 				var isDesc = true;
 				while (!(match.PositionKey >= start && match.PositionKey < start + areaSize))
 				{
@@ -157,10 +161,10 @@ namespace TournamentCalculator
 					losePositionKey = match.PositionKey + 2 * areaSize;
 				isLoserPlayer1 = false;
 			}
-			else if (IsLoserAgainstLoser(match.PositionKey, this.AmountPlayers)) //V(2x+1) -> V(2x+2)
+			else if (IsLoserAgainstLoser(match.PositionKey, tournamentSize)) //V(2x+1) -> V(2x+2)
 			{
-				var start = this.AmountPlayers * 3 / 4;
-				var areaSize = this.AmountPlayers / 4;
+				var start = tournamentSize * 3 / 4;
+				var areaSize = tournamentSize / 4;
 				while (!(match.PositionKey >= start && match.PositionKey < start + areaSize))
 				{
 					start = start + 2 * areaSize;
@@ -173,8 +177,8 @@ namespace TournamentCalculator
 			}
 			else //V(2x) -> V(2x+1)
 			{
-				var start = this.AmountPlayers;
-				var areaSize = this.AmountPlayers / 4;
+				var start = tournamentSize;
+				var areaSize = tournamentSize / 4;
 				while (!(match.PositionKey >= start && match.PositionKey < start + areaSize) && areaSize > 0)
 				{
 					start = start + 2 * areaSize;
@@ -189,17 +193,17 @@ namespace TournamentCalculator
 			}
 
 			if (isWinnerPlayer1) //set winner
-				matches[winPositionKey].Name1 = match.Name1;
+				matches[winPositionKey].Name1 = (match.Name1 == "FL" && match.Name2 != "FL") ? match.Name2 : match.Name1;
 			else
-				matches[winPositionKey].Name2 = match.Name1;
+				matches[winPositionKey].Name2 = (match.Name1 == "FL" && match.Name2 != "FL") ? match.Name2 : match.Name1;
 			ret.Add(winPositionKey);
 
 			if (losePositionKey >= 0) //set loser
 			{
 				if (isLoserPlayer1)
-					matches[losePositionKey].Name1 = match.Name2;
+					matches[losePositionKey].Name1 = (match.Name1 == "FL" && match.Name2 != "FL") ? match.Name1 : match.Name2;
 				else
-					matches[losePositionKey].Name2 = match.Name2;
+					matches[losePositionKey].Name2 = (match.Name1 == "FL" && match.Name2 != "FL") ? match.Name1 : match.Name2;
 				ret.Add(losePositionKey);
 			}
 
