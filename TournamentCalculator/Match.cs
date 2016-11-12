@@ -11,7 +11,7 @@ namespace TournamentCalculator
 		#endregion
 
 		#region ctors
-		public Match()
+		public Match(int key)
 		{
 			this.Dependencies = null;
 			this.Name1 = "";
@@ -19,16 +19,18 @@ namespace TournamentCalculator
 			this.IsPlayable = false;
 			this.IsFinished = false;
 			this.Device = 0;
+			this.PositionKey = key;
 		}
 
-		public Match(List<Match> dependencies, string name1, string name2, bool isPlayable, bool isFinished, int device)
+		public Match(List<Match> dependencies, string name1, string name2, bool isPlayable, int key)
 		{
 			this.Dependencies = dependencies;
 			this.Name1 = name1;
 			this.Name2 = name2;
 			this.IsPlayable = isPlayable;
-			this.IsFinished = isFinished;
-			this.Device = device;
+			this.IsFinished = false;
+			this.Device = 0;
+			this.PositionKey = key;
 		}
 		#endregion
 
@@ -39,6 +41,7 @@ namespace TournamentCalculator
 		public bool IsPlayable { get; set; }
 		public bool IsFinished { get; set; }
 		public int Device { get; set; }
+		public int PositionKey { get; set; }
 		#endregion
 
 		#region private methods

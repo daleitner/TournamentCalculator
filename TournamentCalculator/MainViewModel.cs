@@ -351,12 +351,15 @@ namespace TournamentCalculator
 
 		private void CalculateDKO(double nMatchDuration)
 		{
-			int matchCount = (this.amountPlayers - 1)*2;
-			var matches = new List<Match>();
-			for (var i = 0; i < matchCount; i++)
-			{
-				matches.Add(new Match());
-			}
+			//int matchCount = (this.amountPlayers - 1)*2;
+			//var matches = new List<Match>();
+			//for (var i = 0; i < matchCount; i++)
+			//{
+			//	matches.Add(new Match());
+			//}
+			TournamentController c = new TournamentController(this.amountPlayers, this.amountDevices, nMatchDuration);
+			var totalDuration = c.Simulate();
+			this.FullDuration = "Total:" + totalDuration;
 		}
 
         private bool CanCalculate()
